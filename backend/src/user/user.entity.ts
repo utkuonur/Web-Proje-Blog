@@ -1,27 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 import { Post } from '../post/post.entity';
 
-// @Entity() hocaya bunun bir veritabanı tablosu olduğunu söyler
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn() // Otomatik artan ID (1, 2, 3...)
+  @PrimaryGeneratedColumn() 
   id: number;
 
-  @Column() // Ad sütunu
+  @Column() 
   firstName: string;
 
-  @Column() // Soyad sütunu
+  @Column() 
   lastName: string;
 
-  @Column({ unique: true }) // Email benzersiz olmalı (Hoca sorarsa: "Aynı maille iki kişi üye olamaz")
+  @Column({ unique: true }) 
   email: string;
 
-  @Column() // Şifre sütunu
+  @Column()
   password: string;
 
-  @Column({ default: 'user' }) // Varsayılan rol 'user'. Hoca istediği için 'admin' de yapabileceğiz 
+  @Column({ default: 'user' })
   role: string;
   
   @OneToMany(() => Post, (post) => post.author)
-posts: Post[];
+  posts: Post[];
 }

@@ -11,19 +11,15 @@ export class PostService {
   ) {}
 
   async create(postData: any): Promise<Post> {
-  // 1. Kategorileri TypeORM'un anlayacağı nesne dizisine çeviriyoruz
-  // catId'yi Number() ile sağlama alıyoruz
   const categories = (postData.categories || []).map(catId => ({
     id: Number(catId)
   }));
 
-  // 2. Yeni post nesnesini oluşturuyoruz
   const newPost = this.postRepository.create({
     title: postData.title,
     content: postData.content,
-    // author kısmını Number yaparak nesneye bağlıyoruz
     author: { id: Number(postData.author) }, 
-    categories: categories // Many-to-Many bağlantısı burada kuruluyor
+    categories: categories 
   });
 
   // 3. Veritabanına kaydediyoruz

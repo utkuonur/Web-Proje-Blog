@@ -18,10 +18,9 @@ export class Post {
   author: User;
 
   @OneToMany(() => Like, (like) => like.post)
-likes: Like[];
+  likes: Like[];
 
-  // Çoka-Çok İlişki ve Ara Tablo (Join Table)
   @ManyToMany(() => Category, (category) => category.posts)
-  @JoinTable() // Bu dekoratör SQLite'ta otomatik bir 'post_categories_category' tablosu oluşturur
+  @JoinTable()
   categories: Category[];
 }

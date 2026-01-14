@@ -9,7 +9,6 @@ export class Category {
   @Column()
   name: string;
 
-  // Çoka-Çok İlişki (Many-to-Many)
   @ManyToMany(() => Post, (post) => post.categories)
   posts: Post[];
 }

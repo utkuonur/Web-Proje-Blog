@@ -23,8 +23,8 @@ export class UserController {
   }
   
   @Post('update-role')
-async updateRole(@Body() body: { adminId: number; targetUserId: number; newRole: string }) {
+  async updateRole(@Body() body: { adminId: number; targetUserId: number; newRole: string }) {
   return this.userService.updateRole(body.adminId, body.targetUserId, body.newRole);
-  }
+}
 
 }
