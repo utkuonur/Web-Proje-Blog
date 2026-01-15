@@ -22,7 +22,6 @@ export class PostService {
     categories: categories 
   });
 
-  // 3. Veritabanına kaydediyoruz
   try {
     return await this.postRepository.save(newPost);
   } catch (error) {
@@ -39,16 +38,13 @@ export class PostService {
 
   if (!post) throw new Error('Yazı bulunamadı');
 
-  // YETKİ KONTROLÜ: Yazıyı yazan kişi mi güncelliyor?
   if (post.author.id !== userId) {
     throw new Error('Bu yazıyı güncelleme yetkiniz yok!');
   }
 
-  // Yeni verileri üzerine yazıyoruz
   const { categories, ...rest } = postData;
   Object.assign(post, rest);
 
-  // Kategorileri güncelleme (Many-to-Many)
   if (categories) {
     post.categories = categories.map(catId => ({ id: catId } as any));
   }
@@ -59,8 +55,7 @@ export class PostService {
     const post = await this.postRepository.findOne({ where: { id }, relations: ['author'] });
     
     if (!post) throw new Error("Yazı bulunamadı");
-    
-    // Sahibi mi VEYA Admin mi kontrolü
+
     if (post.author.id === userId || userRole === 'admin') {
       return await this.postRepository.delete(id);
     }
@@ -70,13 +65,11 @@ export class PostService {
 
   async findAll(): Promise<Post[]> {
   return await this.postRepository.find({
-    // Buradaki 'likes' ifadesi çok kritik!
     relations: ['author', 'categories', 'likes'], 
     order: { id: 'DESC' }
   });
 }
 
-// Eğer kategori sayfasında da beğeni görünsün istiyorsan burayı da güncelle:
 async findByCategory(categoryId: number): Promise<Post[]> {
   return await this.postRepository.find({
     where: { categories: { id: categoryId } },

@@ -1,11 +1,11 @@
 import { Controller, Post, Body, Get } from '@nestjs/common';
 import { UserService } from './user.service';
 
-@Controller('user') // Burası 'user' ise istek 'http://localhost:3000/user/register' olur
+@Controller('user') 
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('register') // Frontend bu isme bakıyor
+  @Post('register') 
   async register(@Body() userData: any) {
     return this.userService.create(userData);
   }
@@ -17,7 +17,7 @@ export class UserController {
     return user;
   }
 
-  @Get('all') // Tüm kullanıcıları görme adresi: /user/all
+  @Get('all') 
   async getAllUsers() {
     return this.userService.findAll();
   }

@@ -7,7 +7,6 @@ export class CategoryController {
 
   @Post('create')
   async createCategory(@Body() categoryData: { name: string }) {
-    // Tüm body'yi alıp içinden name'i çekiyoruz, daha güvenli
     return this.categoryService.create(categoryData.name);
   }
 

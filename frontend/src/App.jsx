@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, Navigate, useParams } from 'react-router-dom';
 
-// --- TASARIM SİSTEMİ (CSS-in-JS) ---
 const styles = {
   wrapper: { 
     backgroundColor: '#121212', 
@@ -55,9 +54,7 @@ const styles = {
   }
 };
 
-// --- BİLEŞENLER ---
 
-// 1. ANA SAYFA (BLOG AKIŞI)
 const Home = ({ user }) => {
   const [posts, setPosts] = useState([]);
   const fetchPosts = async () => {
@@ -69,7 +66,7 @@ const Home = ({ user }) => {
   useEffect(() => { fetchPosts(); }, []);
 
   const handleLike = async (postId) => {
-    if (!user) return alert("Beğenmek için giriş yapmalısın kanka!");
+    if (!user) return alert("Beğenmek için giriş yapmalısın");
     await axios.post('http://localhost:3000/like/toggle', { postId, userId: user.id });
     fetchPosts();
   };
@@ -107,7 +104,6 @@ const Home = ({ user }) => {
   );
 };
 
-// 2. YENİ YAZI PAYLAŞMA
 const NewPost = ({ user }) => {
   const [post, setPost] = useState({ title: '', content: '' });
   const [categories, setCategories] = useState([]);
@@ -126,8 +122,8 @@ const NewPost = ({ user }) => {
     const payload = { 
       title: post.title,
       content: post.content,
-      author: Number(user.id), // ID'nin sayı olduğundan emin ol
-      categories: selectedCats.map(id => Number(id)) // Kategori ID'lerini sayı yap
+      author: Number(user.id), 
+      categories: selectedCats.map(id => Number(id))
     };
     
     await axios.post('http://localhost:3000/post/create', payload);
@@ -146,7 +142,7 @@ const NewPost = ({ user }) => {
         <input placeholder="Başlık" onChange={e => setPost({...post, title: e.target.value})} style={styles.input} required />
         <textarea placeholder="İçerik..." onChange={e => setPost({...post, content: e.target.value})} style={{...styles.input, height: '150px'}} required></textarea>
         <div style={{ marginBottom: '20px' }}>
-          <p style={{marginBottom: '10px'}}>Kategori Seç (Postman ile eklediklerin burada çıkar):</p>
+          <p style={{marginBottom: '10px'}}>Kategori Seç:</p>
           <div style={{display: 'flex', gap: '15px', flexWrap: 'wrap'}}>
             {categories.map(c => (
               <label key={c.id} style={{ cursor: 'pointer', fontSize: '14px' }}>
@@ -161,8 +157,7 @@ const NewPost = ({ user }) => {
   );
 };
 
-// 3. YAZI DÜZENLEME
-const EditPost = ({ user }) => {
+  const EditPost = ({ user }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState({ title: '', content: '' });
@@ -197,7 +192,6 @@ const EditPost = ({ user }) => {
   );
 };
 
-// 4. KATEGORİLER VE DETAY
 const Categories = () => {
   const [cats, setCats] = useState([]);
   useEffect(() => { axios.get('http://localhost:3000/category/all').then(res => setCats(res.data)); }, []);
@@ -228,7 +222,6 @@ const CategoryDetail = () => {
   );
 };
 
-// 5. GİRİŞ VE KAYIT
 const Register = () => {
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', password: '', role: 'user' });
   const navigate = useNavigate();
@@ -250,7 +243,6 @@ const Login = ({ setUser }) => {
   );
 };
 
-// 6. ADMIN PANELİ
 const AdminPanel = ({ user }) => {
   const [users, setUsers] = useState([]);
   const fetchUsers = async () => { const res = await axios.get('http://localhost:3000/user/all'); setUsers(res.data); };
@@ -261,7 +253,6 @@ const AdminPanel = ({ user }) => {
   );
 };
 
-// --- ANA UYGULAMA YAPISI (ROUTING) ---
 export default function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null);
 
@@ -272,7 +263,7 @@ export default function App() {
           <nav style={styles.nav}>
             <Link to="/" style={styles.link}>Ana Sayfa</Link>
             <Link to="/categories" style={styles.link}>Kategoriler</Link>
-            {user && <Link to="/new-post" style={{...styles.link, color: '#28a745'}}>+ Yazı Paylaş</Link>}
+            {user && <Link to="/new-post" style={{...styles.link, color: '#28a745'}}>Yazı Paylaş</Link>}
             {!user ? (
               <div style={{ marginLeft: 'auto', display: 'flex', gap: '20px' }}>
                 <Link to="/login" style={styles.link}>Giriş</Link>
